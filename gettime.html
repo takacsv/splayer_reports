@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <script src="ac_quicktime.js"></script>
+    <script type="text/javascript">
+    function onLoad()
+    {
+      var src = 'RTSP URL HERE';
+      var params = [
+        "poster.mov","320","240","",
+        "id","qt","name","qt",
+        "href","javascript: void(0)","loop","true","scale","tofit",
+        "wmode","transparent",
+        "qtsrc",src,
+        "volume","0","autoplay","false","kioskmode","true",
+        "controller","false","EnableJavaScript","true" ];
+
+      if (location.search == '?splayer')
+        params.push('type', 'application/x-vnd.FBSPlayer');
+
+      document.getElementById("qt").innerHTML =
+        QT_GenerateOBJECTText.apply(this, params);
+
+      setTimeout(function() {
+        var player = document.embeds[0];
+        console.log('RATE: ' + player.GetRate());
+        player.Play()
+
+        setInterval(function() {
+          var time = (new Date()).getTime()
+          console.log('REAL TIME: ' + time + ' PLAYER TIME: ' + player.GetTime());
+        }, 1000);
+      }, 5000);
+    }
+    </script>
+  </head>
+  <body onload="onLoad()">
+    <div id="qt"></div>
+  </body>
+</html>
