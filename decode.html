@@ -4,11 +4,12 @@
     <script type="text/javascript">
     function onLoad()
     {
-      var src = 'rtsp://192.168.1.118:8000/video3/dtplayer-20140310-15454200.sdp';
+      // 'http://dl.dropboxusercontent.com/u/5259687/replay/testit.mp4';
+      var src = 'RTSP URL HERE';
       var params = [
-        "poster.mov","320","240","",
+        "poster.mov","640","360","",
         "id","qt","name","qt",
-        "href","javascript: void(0)","loop","true","scale","tofit",
+        "href","javascript: void(0)","loop","false","scale","tofit",
         "wmode","transparent",
         "qtsrc",src,
         "volume","0","autoplay","false","kioskmode","true",
@@ -22,13 +23,18 @@
 
       setTimeout(function() {
         var player = document.embeds[0];
-        console.log('RATE: ' + player.GetRate());
-        player.Play()
 
-        setInterval(function() {
+        var timer;
+        var check = function() {
           var time = (new Date()).getTime()
-          console.log('REAL TIME: ' + time + ' PLAYER TIME: ' + player.GetTime());
-        }, 1000);
+          console.log(time + ' RATE: ' + player.GetRate() +
+            ' TIME: ' + (player.GetTime() / player.GetTimeScale()));
+
+          timer = setTimeout(check, 1000);
+        };
+        check();
+
+        player.Play()
       }, 5000);
     }
     </script>
