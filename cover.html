@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <script src="ac_quicktime.js"></script>
+    <script type="text/javascript">
+    function onLoad()
+    {
+      // 'http://dl.dropboxusercontent.com/u/5259687/replay/testit.mp4';
+      var src = 'rtsp://192.168.1.118:8000/video3/testit.mp4';
+      var params = [
+        "poster.mov","640","360","",
+        "id","qt","name","qt",
+        "href","javascript: void(0)","loop","false","scale","tofit",
+        "wmode","transparent",
+        "qtsrc",src,
+        "volume","100","autoplay","false","kioskmode","true",
+        "controller","false","EnableJavaScript","true" ];
+
+      if (location.search.match('splayer'))
+        params.push('type', 'application/x-vnd.FBSPlayer');
+
+      if (location.search.match('windowless'))
+        params.push('windowless', 'true');
+
+      document.getElementById("qt").innerHTML =
+        QT_GenerateOBJECTText.apply(this, params);
+
+      setTimeout(function() {
+        var player = document.embeds[0];
+
+        var timer;
+        var check = function() {
+          var time = (new Date()).getTime()
+          console.log(time + ' RATE: ' + player.GetRate() +
+            ' TIME: ' + (player.GetTime() / player.GetTimeScale()));
+
+          timer = setTimeout(check, 1000);
+        };
+        check();
+
+        player.Play()
+      }, 5000);
+
+    }
+    var volume = 100;
+
+    function toggleVol() {
+      var player = document.embeds[0];
+      if (volume == 100)
+      {
+        volume = 0;
+      }
+      else
+      {
+        volume = 100;
+      }
+      player.SetVolume(volume)
+    }
+    </script>
+  </head>
+  <body onload="onLoad()">
+    <div id="qt"></div>
+    <button onclick="javascript: toggleVol();">togglevol</button>
+    <div id="cover" style="position: absolute; top: 0; left: 0; width: 50px; height: 50px; border: 5px solid red; border-radius: 5px;"></div>
+  </body>
+</html>
