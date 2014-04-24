@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="ac_quicktime.js"></script>
+    <script type="text/javascript">
+
+    var timer = [];
+    var src = [
+      //'rtsp://192.168.1.111:7998/video3/dtplayer-20140424-11295500.sdp',
+      //'rtsp://192.168.1.111:7998/video3/dtplayer-20140424-11295501.sdp'
+      '',
+      ''
+    ];
+
+    function embed(idx) 
+    {
+      clearInterval(timer[idx]);
+      document.getElementById('rate' + idx).innerHTML = '---';
+      document.getElementById('qt' + idx).innerHTML =
+        QT_GenerateOBJECTText.apply(this, [
+          'poster.mov', '320', '240', '',
+          'id', 'qt', 'name', 'qt',
+          'href', 'javascript: void(0)', 'loop', 'true', 'scale', 'tofit',
+          'wmode', 'transparent',
+          'type', 'application/x-vnd.FBSPlayer', 'windowless', 'true',
+          'qtsrc', src[idx],
+          'volume', '100', 'autoplay', 'true', 'kioskmode', 'true',
+          'controller', 'false', 'EnableJavaScript', 'true',
+          'ptz', 'true', 'PTZClickTimeout', '300', 'PTZScroll', 'false'
+        ]);
+    }
+
+    function check(idx)
+    {
+      return function() {
+        embed = document.embeds[idx]; 
+        if (embed)
+        {
+          var rate = embed.GetRate();
+          if (parseInt(rate))
+          {
+            document.getElementById('rate' + idx).innerHTML = 'OK';
+            clearInterval(timer[idx]);
+          }
+        }
+      };
+    }
+
+    function load()
+    {
+      for (var i = 0; i <= 1; i++)
+      {
+        embed(i);
+        timer[i] = setInterval(check(i), 100);
+      }
+    }
+
+    </script>
+
+    <style type="text/css">
+      .video {
+        float: left;
+        margin-right: 10px;
+        }
+    </style>
+  </head>
+
+  <body onload="load()">
+    <p>
+      PLAYING #1: <span id="rate0"></span>
+    </p>
+    <p>
+      PLAYING #2: <span id="rate1"></span>
+    </p>
+    <div>
+      <div class="video" id="qt0"></div>
+      <div class="video" id="qt1"></div>
+    </div>
+  </body>
+</html>
